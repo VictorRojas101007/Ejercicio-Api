@@ -44,6 +44,7 @@ function createCard(meal) {
   console.log({ ingredients, measure });
   const card = document.createElement("div");
   card.classList.add("card");
+  card.setAttribute("data-id", meal.idMeal);
   card.innerHTML = `
           <img src="${meal.strMealThumb}" 
               height="270px" 
@@ -57,7 +58,9 @@ function createCard(meal) {
       `;
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Eliminar";
-  deleteBtn.addEventListener("click", () => {
+  deleteBtn.classList.add("delete");
+  deleteBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
     const idCard = document.querySelector(`[data-id="${meal.idMeal}"]`);
     idCard.remove();
   });
