@@ -14,6 +14,17 @@ form.addEventListener("submit", (event) => {
     })
     .then((data) => {
       if (!data.meals) {
+        cardsContainer.innerHTML = `<div class="tenor-gif-embed" data-postid="9341845775617694425" data-share-method="host"
+                data-aspect-ratio="3" data-width="90%"><a
+                    href="https://tenor.com/view/there%27s-no-food-over-here-matty-matheson-cookin-somethin-30-minute-matty-meal-we%27re-out-of-food-gif-9341845775617694425">There&#39;S
+                    No Food Over Here Matty Matheson GIF</a>from <a
+                    href="https://tenor.com/search/there%27s+no+food+over+here-gifs">There&#39;S No Food Over Here
+                    GIFs</a></div>
+            <span style="display: block;">Meal not found!!</span>`;
+        const tenorScript = document.createElement("script");
+        tenorScript.src = "https://tenor.com/embed.js";
+        tenorScript.async = true;
+        document.body.appendChild(tenorScript);
         console.error("No meals found");
         return;
       }
