@@ -17,6 +17,7 @@ form.addEventListener("submit", (event) => {
         console.error("No meals found");
         return;
       }
+      console.log(data.meals);
       cardsContainer.innerHTML = "";
       const mealsElements = data.meals.map((meal) => createCard(meal));
       cardsContainer.append(...mealsElements);
@@ -29,14 +30,14 @@ function createCard(meal) {
   let extended = false;
   const ingredients = Object.entries(meal)
     .filter(([key, value]) => {
-      return key.startsWith("strIngredient") && value.trim() !== "";
+      return key.startsWith("strIngredient") && value && value.trim() !== "";
     })
     .map(([_key, value]) => {
       return value;
     });
   const measure = Object.entries(meal)
     .filter(([key, value]) => {
-      return key.startsWith("strMeasure") && value.trim() !== "";
+      return key.startsWith("strMeasure") && value && value.trim() !== "";
     })
     .map(([_key, value]) => {
       return value;
