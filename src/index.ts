@@ -1,18 +1,30 @@
-const cardsContainer = document.getElementById("cards");
-const form = document.querySelector("#form");
-form.addEventListener("submit", (event) => {
+interface Meal {
+  idMeal: string;
+  strMeal: string;
+  strCategory: string;
+  strMealThumb: string;
+  strYoutube: string;
+  [key: string]: string | null;
+}
+interface MealResponse {
+  meals: Meal[] | null;
+}
+
+const cardsContainer = document.querySelector("#cards") as HTMLElement;
+const form = document.querySelector("#form") as HTMLFormElement;
+form.addEventListener("submit", (event: SubmitEvent) => {
   event.preventDefault();
-  const searchTerm = form.search.value;
+  const searchTerm = (form.search as HTMLInputElement).value;
   const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`;
 
   fetch(url, { method: "GET" })
-    .then((response) => {
+    .then((response: Response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       return response.json();
     })
-    .then((data) => {
+    .then((data: MealResponse) => {
       if (!data.meals) {
         cardsContainer.innerHTML = `<div class="tenor-gif-embed" data-postid="9341845775617694425" data-share-method="host"
                 data-aspect-ratio="3" data-width="90%"><a
@@ -30,28 +42,28 @@ form.addEventListener("submit", (event) => {
       }
       console.log(data.meals);
       cardsContainer.innerHTML = "";
-      const mealsElements = data.meals.map((meal) => createCard(meal));
+      const mealsElements = data.meals.map((meal: Meal) => createCard(meal));
       cardsContainer.append(...mealsElements);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 });
-function createCard(meal) {
+function createCard(meal: Meal): HTMLElement {
   let extended = false;
-  const ingredients = Object.entries(meal)
-    .filter(([key, value]) => {
+  const ingredients: string[] = Object.entries(meal)
+    .filter(([key, value]: [string, string | null]) => {
       return key.startsWith("strIngredient") && value && value.trim() !== "";
     })
-    .map(([_key, value]) => {
-      return value;
+    .map(([_key, value]: [string, string | null]) => {
+      return value as string;
     });
-  const measure = Object.entries(meal)
-    .filter(([key, value]) => {
+  const measure: string[] = Object.entries(meal)
+    .filter(([key, value]: [string, string | null]) => {
       return key.startsWith("strMeasure") && value && value.trim() !== "";
     })
-    .map(([_key, value]) => {
-      return value;
+    .map(([_key, value]: [string, string | null]) => {
+      return value as string;
     });
   console.log({ ingredients, measure });
   const card = document.createElement("div");
@@ -73,7 +85,9 @@ function createCard(meal) {
   deleteBtn.classList.add("delete");
   deleteBtn.addEventListener("click", (event) => {
     event.stopPropagation();
-    const idCard = document.querySelector(`[data-id="${meal.idMeal}"]`);
+    const idCard = document.querySelector(
+      `[data-id="${meal.idMeal}"]`
+    ) as HTMLElement;
     idCard.remove();
   });
   card.appendChild(deleteBtn);
